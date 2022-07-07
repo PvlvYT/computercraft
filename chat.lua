@@ -118,4 +118,4 @@ local function detectDisconnect()
 end
 
 addMessage(nil, "Connected successfully")
-parallel.waitForAny(detectSend, detectReceive, detectResize)
+parallel.waitForAny(detectSend, detectReceive, detectResize, detectDisconnect)
