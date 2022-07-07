@@ -112,7 +112,7 @@ local function detectDisconnect()
         if side == screenName then
             fail("MONITOR DISCONNECTED, PLEASE RESTART CHAT")
         elseif side == modemName then
-            fail("MODEM DISCONNECTED, PLREASE RESTART CHAT")
+            fail("MODEM DISCONNECTED, PLEASE RESTART CHAT")
         end
     end
 end
