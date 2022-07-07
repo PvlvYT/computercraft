@@ -24,7 +24,6 @@ local screen = peripheral.wrap(screenName)
 clr(term)
 clr(screen)
 
-rednet.CHANNEL_BROADCAST = 123
 rednet.open(modemName)
 
 print("Starting on modem " .. modemName:upper() .. " and screen " .. screenName:upper())
@@ -87,18 +86,33 @@ local function detectSend()
     end
 end
 
+local function fail(reason)
+    local oldBg = term.getBackgroundColor()
+            local oldTxt = term.getTextColor()
+            term.setBackgroundColor(colors.red)
+            term.setTextColor(oldBg)
+            print(reason)
+            term.setBackgroundColor(oldBg)
+            term.setTextColor(oldTxt)
+            error("")
+end
+
 local function detectResize()
     while true do
         local _, side = os.pullEvent("monitor_resize")
         if side == screenName then
-            local oldBg = term.getBackgroundColor()
-            local oldTxt = term.getTextColor()
-            term.setBackgroundColor(colors.red)
-            term.setTextColor(oldBg)
-            print("MONITOR RESIZED, PLEASE RESTART CHAT")
-            term.setBackgroundColor(oldBg)
-            term.setTextColor(oldTxt)
-            error("")
+            fail("MONITOR RESIZED, PLEASE RESTART CHAT")
+        end
+    end
+end
+
+local function detectDisconnect()
+    while true do
+        local _, side = os.pullEvent("peripheral_detach")
+        if side == screenName then
+            fail("MONITOR DISCONNECTED, PLEASE RESTART CHAT")
+        elseif side == modemName then
+            fail("MODEM DISCONNECTED, PLREASE RESTART CHAT")
         end
     end
 end
