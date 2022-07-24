@@ -177,15 +177,14 @@ while true do
     resetCol()
     print(cmdRaw)
 
-    if cmd == "exit" then
-        break
-    else
-        commands[cmd].exec(args)
-    end
+    commands[cmd].exec(args)
+    if cmd == "exit" then break end
     
-    print("Press any key to continue")
     local _,y = term.getCursorPos()
     term.setCursorPos(1, y+1)
+    print("Press any key to continue...")
 
     os.pullEvent("key")
+    os.pullEvent("key_up")
 end
+
