@@ -1,4 +1,4 @@
-local gitMain = "https://raw.githubusercontent.com/PvlvYT/computercraft/main/"
+local gitDownloadables = "https://raw.githubusercontent.com/PvlvYT/computercraft/main/downloadables/"
 
 local function clr()
     term.clear()
@@ -19,23 +19,49 @@ local function setCol(txtC, bgC)
     end
 end
 
+local function strSplit (inputstr, sep)
+    if sep == nil then
+            sep = "%s"
+    end
+    local t = {}
+    for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
+            table.insert(t, str)
+    end
+    return t
+end
+
 local function downloadFile(path, saveAs)
-    
+    local response = http.get(gitDownloadables .. path, {["Cache-Control"] = "no-cache"})
+
+    if not response then
+        return false
+    end
+    if fs.exists(saveAs) then
+        fs.delete(saveAs)
+    end
+
+    local new = fs.open(saveAs, "w")
+    new.write(response.readAll())
+    new.close()
+
+    return true
 end
 
 local commands = {}
 
 commands.list = {
     desc = "Show all downloadable programs";
-    exec = function()
-        print("list lmfao!")
+    exec = function(args)
+        for i,v in ipairs(args) do
+            print(i, "[" .. v .. "]")
+        end
     end;
 }
 
 commands.download = {
     usage = "<programName>";
     desc = "Download a program from Pvlv's GitHub";
-    exec = function()
+    exec = function(args)
         print("downlaod lol")
     end;
 }
@@ -47,6 +73,7 @@ setCol(colors.yellow)
 print("Welcome to Pvlv's program downloader")
 print("Available Commands:")
 resetCol()
+
 for name, info in pairs(commands) do
     setCol(colors.lightBlue)
 
@@ -61,3 +88,32 @@ for name, info in pairs(commands) do
         write(" ", info.desc)
     end
 end
+
+local _,y = term.getCursorPos()
+y = y + 1
+term.setCursorPos(1, y)
+
+local cmd
+local args
+while true do
+    setCol(colors.yellow)
+    write("> ")
+
+    local cmdRaw = read()
+    cmd = strSplit(cmdRaw:lower(), "%s")[1]
+    args = strSplit(cmdRaw:sub(#cmd))
+    if commands[cmd] then
+        break
+    end
+
+    term.setCursorPos(1, y)
+    term.clearLine()
+    setCol(colors.red)
+    write("Invalid Command")
+    sleep(2)
+    resetCol()
+    term.clearLine()
+end
+
+clr()
+commands[cmd].exec(args)
