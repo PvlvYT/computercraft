@@ -72,6 +72,7 @@ commands.download = {
             setCol(colors.black, colors.green)
             print("Download successful")
             resetCol()
+            print('Saved as "' .. saveAs .. '"')
         else
             setCol(colors.black, colors.red)
             print("Download failed")
