@@ -49,18 +49,35 @@ end
 
 local commands = {}
 
-commands.list = {
-    desc = "Show all downloadable programs";
-    exec = function(args)
-        
-    end;
-} commands.list = nil
+commands.exit = {
+    desc = "Exit the downloader";
+    exec = function() end;
+}
 
 commands.download = {
-    usage = "<programName>";
-    desc = "Download a program from Pvlv's GitHub";
+    usage = "<programName> <saveAs>";
+    desc = "Download a program";
     exec = function(args)
-        print("downlaod lol")
+        local progName = args[1] or ""
+        local saveAs = args[2] or "pvlv_downloaded.lua"
+        if fs.exists("saveAs") then
+            write('Path "' .. saveAs .. '" already exists, type YES to proceed: ')
+            local proc = read():lower()
+            if proc ~= "yes" then return end
+        end
+
+        print("Starting download")
+        local success = downloadFile(progName, saveAs)
+        if success then
+            setCol(colors.black, colors.green)
+            print("Download successful")
+            resetCol()
+        else
+            setCol(colors.black, colors.red)
+            print("Download failed")
+            resetCol()
+            print("Is the program name correct?")
+        end
     end;
 }
 
@@ -69,7 +86,7 @@ clr()
 setCol(colors.blue)
 
 print("Welcome to Pvlv's program downloader")
-print("Available Commands:")
+print("Available commands:")
 resetCol()
 
 for name, info in pairs(commands) do
@@ -110,7 +127,7 @@ while true do
     term.setCursorPos(1, y)
     term.clearLine()
     setCol(colors.red)
-    write("Invalid Command")
+    write("Invalid command")
     sleep(2)
     resetCol()
     term.setCursorPos(1,y)
