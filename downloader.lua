@@ -98,6 +98,8 @@ commands.list = {
         print("Note: this list might not be completely up-to-date")
         print("You can see the up-to-date list here:")
         print("https://github.com/PvlvYT/computercraft/tree/main/downloadables")
+        local _,y = term.getCursorPos()
+        term.setCursorPos(1, y+1)
         setCol(colors.lightBlue)
         for _, n in ipairs(progList) do
             print(n)
