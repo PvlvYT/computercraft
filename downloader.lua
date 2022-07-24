@@ -1,4 +1,5 @@
-local gitDownloadables = "https://raw.githubusercontent.com/PvlvYT/computercraft/main/downloadables/"
+local gitDownloadablesPath = "https://raw.githubusercontent.com/PvlvYT/computercraft/main/downloadables/"
+local gitDownloadablesApi = "https://api.github.com/repos/PvlvYT/computercraft/contents/downloadables"
 
 local function clr()
     term.clear()
@@ -31,7 +32,7 @@ local function strSplit (inputstr, sep)
 end
 
 local function downloadFile(path, saveAs)
-    local response = http.get(gitDownloadables .. path, {["Cache-Control"] = "no-cache"})
+    local response = http.get(gitDownloadablesPath .. path, {["Cache-Control"] = "no-cache"})
 
     if not response then
         return false
@@ -49,22 +50,28 @@ end
 
 local commands = {}
 
-commands.exit = {
-    desc = "Exit the downloader";
-    exec = function() end;
-}
-
 commands.download = {
     usage = "<programName> <saveAs>";
     desc = "Download a program";
     exec = function(args)
         local progName = args[1] or ""
-        local saveAs = args[2] or "pvlv_downloaded.lua"
+        local saveAs = args[2] or "pvlv_downloaded"
+
+        progName = progName:gsub(".lua", "")
+        progName = progName .. ".lua"
+        saveAs = saveAs:gsub(".lua", "")
+        saveAs = saveAs .. ".lua"
 
         if fs.exists(saveAs) then
+            setCol(colors.black, colors.red)
             write('Path "' .. saveAs .. '" already exists, type YES to proceed: ')
+            resetCol()
             local proc = read():lower()
-            if proc ~= "yes" then return end
+            if proc ~= "yes" then
+                print("Aborted")
+                return
+            end
+            print("Overwrite confirmed")
         end
 
         print("Starting download")
@@ -81,6 +88,27 @@ commands.download = {
             print("Is the program name correct?")
         end
     end;
+}
+
+local progList = {"chat.lua"}
+commands.list = {
+    desc = "List programs";
+    exec = function(args)
+        setCol(colors.blue)
+        print("Note: this list might not be completely up-to-date")
+        print("You can see the up-to-date list here:")
+        print("https://github.com/PvlvYT/computercraft/tree/main/downloadables")
+        setCol(colors.lightBlue)
+        for _, n in ipairs(progList) do
+            print(n)
+        end
+        resetCol()
+    end;
+}
+
+commands.exit = {
+    desc = "Exit the downloader";
+    exec = function(args) end;
 }
 
 resetCol()
