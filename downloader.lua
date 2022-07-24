@@ -116,6 +116,7 @@ local args
 while true do
     setCol(colors.blue)
     write("> ")
+    resetCol()
 
     local cmdRaw = read()
     cmd = strSplit(cmdRaw:lower(), "%s")[1]
