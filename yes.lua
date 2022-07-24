@@ -9,4 +9,6 @@ while true do
         turtle.turnLeft()
     end
     turtle.forward()
+
+    sleep(.05)
 end
