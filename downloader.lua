@@ -113,6 +113,7 @@ while true do
     write("Invalid Command")
     sleep(2)
     resetCol()
+    term.setCursorPos(1,y)
     term.clearLine()
 end
 
