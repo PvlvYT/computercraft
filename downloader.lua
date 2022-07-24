@@ -66,7 +66,7 @@ commands.download = {
 
 resetCol()
 clr()
-setCol(colors.yellow)
+setCol(colors.blue)
 
 print("Welcome to Pvlv's program downloader")
 print("Available Commands:")
@@ -97,7 +97,7 @@ term.setCursorPos(1, y)
 local cmd
 local args
 while true do
-    setCol(colors.yellow)
+    setCol(colors.blue)
     write("> ")
 
     local cmdRaw = read()
@@ -116,5 +116,4 @@ while true do
     term.clearLine()
 end
 
-clr()
 commands[cmd].exec(args)
