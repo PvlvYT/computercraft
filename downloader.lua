@@ -60,7 +60,8 @@ commands.download = {
     exec = function(args)
         local progName = args[1] or ""
         local saveAs = args[2] or "pvlv_downloaded.lua"
-        if fs.exists("saveAs") then
+
+        if fs.exists(saveAs) then
             write('Path "' .. saveAs .. '" already exists, type YES to proceed: ')
             local proc = read():lower()
             if proc ~= "yes" then return end
@@ -112,6 +113,7 @@ local _,y = term.getCursorPos()
 y = y + 1
 term.setCursorPos(1, y)
 
+local cmdRaw
 local cmd
 local args
 while true do
@@ -119,7 +121,7 @@ while true do
     write("> ")
     resetCol()
 
-    local cmdRaw = read()
+    cmdRaw = read()
     cmd = strSplit(cmdRaw:lower(), "%s")[1]
     args = strSplit(cmdRaw:sub(#cmd+1))
     if commands[cmd] then
@@ -135,5 +137,11 @@ while true do
     term.setCursorPos(1,y)
     term.clearLine()
 end
+
+clr()
+setCol(colors.blue)
+write("> ")
+resetCol()
+print(cmdRaw)
 
 commands[cmd].exec(args)
