@@ -52,11 +52,9 @@ local commands = {}
 commands.list = {
     desc = "Show all downloadable programs";
     exec = function(args)
-        for i,v in ipairs(args) do
-            print(i, "[" .. v .. "]")
-        end
+        
     end;
-}
+} commands.list = nil
 
 commands.download = {
     usage = "<programName>";
@@ -79,14 +77,17 @@ for name, info in pairs(commands) do
 
     write(name)
     if info.usage then
-        write(" ", info.usage)
+        write(" " .. info.usage)
     end
     
     resetCol()
 
     if info.desc then
-        write(" ", info.desc)
+        write(" " .. info.desc)
     end
+
+    local _,y = term.getCursorPos()
+    term.setCursorPos(1, y+1)
 end
 
 local _,y = term.getCursorPos()
@@ -101,7 +102,7 @@ while true do
 
     local cmdRaw = read()
     cmd = strSplit(cmdRaw:lower(), "%s")[1]
-    args = strSplit(cmdRaw:sub(#cmd)+1)
+    args = strSplit(cmdRaw:sub(#cmd+1))
     if commands[cmd] then
         break
     end
