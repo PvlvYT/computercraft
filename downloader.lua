@@ -98,8 +98,10 @@ commands.list = {
         print("Note: this list might not be completely up-to-date")
         print("You can see the up-to-date list here:")
         print("https://github.com/PvlvYT/computercraft/tree/main/downloadables")
+
         local _,y = term.getCursorPos()
         term.setCursorPos(1, y+1)
+
         setCol(colors.lightBlue)
         for _, n in ipairs(progList) do
             print(n)
@@ -113,65 +115,77 @@ commands.exit = {
     exec = function(args) end;
 }
 
-resetCol()
-clr()
-setCol(colors.blue)
+while true do
+        resetCol()
+    clr()
+    setCol(colors.blue)
 
-print("Welcome to Pvlv's program downloader")
-print("Available commands:")
-resetCol()
-
-for name, info in pairs(commands) do
-    setCol(colors.lightBlue)
-
-    write(name)
-    if info.usage then
-        write(" " .. info.usage)
-    end
-    
+    print("Welcome to Pvlv's program downloader")
+    print("Available commands:")
     resetCol()
 
-    if info.desc then
-        write(" " .. info.desc)
+    for name, info in pairs(commands) do
+        setCol(colors.lightBlue)
+
+        write(name)
+        if info.usage then
+            write(" " .. info.usage)
+        end
+        
+        resetCol()
+
+        if info.desc then
+            write(" " .. info.desc)
+        end
+
+        local _,y = term.getCursorPos()
+        term.setCursorPos(1, y+1)
     end
 
     local _,y = term.getCursorPos()
-    term.setCursorPos(1, y+1)
-end
+    y = y + 1
+    term.setCursorPos(1, y)
 
-local _,y = term.getCursorPos()
-y = y + 1
-term.setCursorPos(1, y)
+    local cmdRaw
+    local cmd
+    local args
+    while true do
+        setCol(colors.blue)
+        write("> ")
+        resetCol()
 
-local cmdRaw
-local cmd
-local args
-while true do
+        cmdRaw = read()
+        cmd = strSplit(cmdRaw:lower(), "%s")[1]
+        args = strSplit(cmdRaw:sub(#cmd+1))
+        if commands[cmd] then
+            break
+        end
+
+        term.setCursorPos(1, y)
+        term.clearLine()
+        setCol(colors.red)
+        write("Invalid command")
+        sleep(2)
+        resetCol()
+        term.setCursorPos(1,y)
+        term.clearLine()
+    end
+
+    clr()
     setCol(colors.blue)
     write("> ")
     resetCol()
+    print(cmdRaw)
 
-    cmdRaw = read()
-    cmd = strSplit(cmdRaw:lower(), "%s")[1]
-    args = strSplit(cmdRaw:sub(#cmd+1))
-    if commands[cmd] then
+    if cmd == "exit" then
         break
+    else
+        commands[cmd].exec(args)
     end
+    
+    print("Press any key to continue")
+    local _,y = term.getCursorPos()
+    term.setCursorPos(1, y+1)
 
-    term.setCursorPos(1, y)
-    term.clearLine()
-    setCol(colors.red)
-    write("Invalid command")
-    sleep(2)
-    resetCol()
-    term.setCursorPos(1,y)
-    term.clearLine()
+    os.pullEvent("key")
 end
-
-clr()
-setCol(colors.blue)
-write("> ")
-resetCol()
-print(cmdRaw)
-
-commands[cmd].exec(args)
