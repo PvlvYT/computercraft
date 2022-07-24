@@ -101,7 +101,7 @@ while true do
 
     local cmdRaw = read()
     cmd = strSplit(cmdRaw:lower(), "%s")[1]
-    args = strSplit(cmdRaw:sub(#cmd))
+    args = strSplit(cmdRaw:sub(#cmd)+1)
     if commands[cmd] then
         break
     end
