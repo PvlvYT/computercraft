@@ -17,6 +17,10 @@ local function setCol(txtC, bgC)
     end
 end
 
+local function downloadFile()
+    
+end
+
 local commands = {}
 
 commands.list = {
