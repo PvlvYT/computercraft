@@ -1,3 +1,5 @@
+local gitMain = "https://raw.githubusercontent.com/PvlvYT/computercraft/main/"
+
 local function clr()
     term.clear()
     term.setCursorPos(1,1)
@@ -17,7 +19,7 @@ local function setCol(txtC, bgC)
     end
 end
 
-local function downloadFile()
+local function downloadFile(path, saveAs)
     
 end
 
