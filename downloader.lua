@@ -32,7 +32,7 @@ local function strSplit (inputstr, sep)
 end
 
 local function downloadFile(path, saveAs)
-    local response = http.get(gitDownloadablesPath .. path, {["Cache-Control"] = "no-cache"})
+    local response = http.get(gitDownloadablesPath .. path)
 
     if not response then
         return false
