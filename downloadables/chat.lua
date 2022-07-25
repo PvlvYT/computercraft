@@ -1,4 +1,4 @@
-local function clr(a) a.setCursorPos(1,1) a.clear()  end
+local function clr(a) a.setCursorPos(1,1) a.clear() end
 clr(term)
 
 local function getPeripheral(pType)
@@ -20,6 +20,7 @@ end
 local modemName = getPeripheral("modem")
 local screenName = getPeripheral("monitor")
 local screen = peripheral.wrap(screenName)
+screen.setTextScale(1)
 
 clr(term)
 clr(screen)
